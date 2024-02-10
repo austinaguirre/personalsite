@@ -1,24 +1,26 @@
-import { Outlet, Link } from "react-router-dom";
-import '../css/Layout.css'; // Import a CSS file for styling
+import React from 'react';
+import { Link, Outlet } from "react-router-dom";
+import { useAuth } from '../context/AuthContext';
 
 const Layout = () => {
+  const { currentUser, logout } = useAuth();
+
   return (
     <>
       <nav className="navbar">
         <ul className="nav-list">
-          <li className="nav-item">
-            <Link to="/" className="nav-link">Home</Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/blogs" className="nav-link">Blogs</Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/contact" className="nav-link">Contact</Link>
-          </li>
+          <li className="nav-item"><Link to="/" className="nav-link">Home</Link></li>
+          {currentUser ? (
+            <li className="nav-item"><button onClick={logout}>Logout</button></li>
+          ) : (
+            <>
+              <li className="nav-item"><Link to="/login" className="nav-link">Login</Link></li>
+              <li className="nav-item"><Link to="/signup" className="nav-link">Signup</Link></li>
+            </>
+          )}
         </ul>
       </nav>
-
-      <Outlet />
+      <Outlet /> {/* This line is crucial for rendering child components */}
     </>
   );
 };

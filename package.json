@@ -1,12 +1,20 @@
 {
   "name": "my-react-app",
   "version": "0.1.0",
+  "proxy": "http://localhost:7864",
   "private": true,
   "homepage": "https://austinaguirre.github.io/personalsite",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.1.1",
+    "pg": "^8.11.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.0",
@@ -15,6 +23,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "prestart": "node generateAudioList.js",
+    "prebuild": "node generateAudioList.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -42,5 +52,10 @@
   },
   "devDependencies": {
     "gh-pages": "^6.1.1"
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
