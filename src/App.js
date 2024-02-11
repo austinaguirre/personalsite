@@ -8,6 +8,7 @@ import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PostsPage from "./pages/PostsPage";
 import CreatePostPage from "./pages/CreatePostPage"; 
+import SinglePost from "./components/SinglePost";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
           <Route path="*" element={<NoPage />} />
+          <Route path="/single-post/:postId" element={<SinglePost />} />
         </Route>
       </Routes>
     </BrowserRouter>

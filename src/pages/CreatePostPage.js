@@ -3,7 +3,8 @@ import { useAuth } from '../context/AuthContext'; // Make sure the path is corre
 
 const CreatePostPage = () => {
   const [title, setTitle] = useState('');
-  const [tags, setTagOptions] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]); // State for selected tags
+  const [tagOptions, setTagOptions] = useState([]); // State for all tag options
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
   const { checkAuthentication } = useAuth(); // Use checkAuthentication to refresh user state if needed
@@ -21,7 +22,7 @@ const CreatePostPage = () => {
 
     const formData = new FormData();
     formData.append('title', title);
-    tags.forEach(tag => formData.append('tags', tag));
+    selectedTags.forEach(tag => formData.append('tags', tag));
     formData.append('description', description);
     formData.append('audioFile', file);
 
@@ -48,16 +49,15 @@ const CreatePostPage = () => {
   };
 
   const handleTagChange = (e) => {
-    // Update the tags state based on selected options
-    const selectedTags = Array.from(e.target.selectedOptions).map(option => option.value);
-    setTagOptions(selectedTags);
+    const selected = Array.from(e.target.selectedOptions, option => option.value);
+    setSelectedTags(selected); // Update the state with the selected tags
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required />
-      <select multiple value={tags} onChange={handleTagChange}>
-        {tags.map(tag => (
+      <select multiple value={selectedTags} onChange={handleTagChange}>
+        {tagOptions.map(tag => (
           <option key={tag} value={tag}>{tag}</option>
         ))}
       </select>

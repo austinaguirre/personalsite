@@ -83,7 +83,10 @@ const PostsPage = () => {
 
       {/* Posts List */}
       {posts.map(post => (
-        <Post key={post._id} post={post} fetchPostComments={fetchPostComments} />
+        <div key={post._id}>
+          <Post key={post._id} post={post} fetchPostComments={fetchPostComments} />
+          <button onClick={() => navigate(`/single-post/${post._id}`)}>View More</button>
+        </div>
       ))}
       {/* Pagination Controls */}
       <div>
