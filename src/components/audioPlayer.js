@@ -1,16 +1,17 @@
+//           <audio controls src={`${process.env.PUBLIC_URL}${file}`}>
 import React from 'react';
-import audioFiles from './audioFiles.json';
 
-const AudioPlayer = () => {
+const backendBaseUrl = process.env.REACT_APP_BACKEND_URL;
+
+const AudioPlayer = ({ audioFilePath }) => {
+  
+  const fullAudioFilePath = `${backendBaseUrl}${audioFilePath}`;
+
   return (
     <div>
-      {audioFiles.map((file, index) => (
-        <div key={index}>
-          <audio controls src={`${process.env.PUBLIC_URL}${file}`}>
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-      ))}
+      <audio controls src={fullAudioFilePath}>
+        Your browser does not support the audio element.
+      </audio>
     </div>
   );
 };

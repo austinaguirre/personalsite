@@ -3,9 +3,8 @@ const express = require('express');
 const connectDB = require('./config/db');
 const cookieParser = require('cookie-parser');
 const cors = require('cors'); // Make sure to require cors
-
-// Import the auth middleware correctly based on your file structure
 const auth = require('./middleware/auth');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +15,7 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 
 

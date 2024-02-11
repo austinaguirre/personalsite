@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AudioPlayer from './audioPlayer';
 
 const Post = ({ post, fetchPostComments }) => {
   const [comment, setComment] = useState('');
@@ -35,6 +36,7 @@ const Post = ({ post, fetchPostComments }) => {
     <div>
       <p>{post.title} by {post.createdBy.username} on {new Date(post.createdAt).toLocaleDateString()}</p>
       {/* Display comments */}
+      {post.audioFilePath && <AudioPlayer audioFilePath={post.audioFilePath} />}
       {post.comments.map((c, index) => (
         <div key={index}>
           <p>{c.text} by {c.postedBy.username}</p>

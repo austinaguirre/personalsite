@@ -103,7 +103,9 @@ router.get('/', auth, async (req, res) => {
       if (user) {
         query.createdBy = user._id;
       } else {
-        return res.json([]);
+        // Instead of returning an empty array immediately,
+        // set a query condition that ensures no events will be found.
+        query.createdBy = null;
       }
     }
 
@@ -121,12 +123,21 @@ router.get('/', auth, async (req, res) => {
       .skip(skipIndex)
       .exec();
 
-    res.json({ data: events, count });
+    // Ensure events include the file path (e.g., audioFilePath or imagePath)
+    const formattedEvents = events.map(event => ({
+      ...event.toObject(),
+      // Add any additional formatting or computed fields if necessary
+      // For example, if you have a base URL for your files:
+      // audioFilePath: `${process.env.FILES_BASE_URL}${event.audioFilePath}`
+    }));
+
+    res.json({ data: formattedEvents, count });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
   }
 });
+
 
 // POST /api/events/:eventId/comments - Add a comment to an event
 router.post('/:eventId/newComment', auth, async (req, res) => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import audioFiles from '../audioFiles.json';
 import { useAuth } from '../context/AuthContext'; // Adjust the import path as necessary
 
 const Home = () => {
@@ -18,15 +17,6 @@ const Home = () => {
         // Show this image if the user is not logged in
         <img src={`${process.env.PUBLIC_URL}/images/download.jpeg`} alt="Welcome Image" />
       )}
-      
-      {/* Existing audio players for each file */}
-      {audioFiles.map((file, index) => (
-        <div key={index}>
-          <audio controls src={`${process.env.PUBLIC_URL}${file}`}>
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-      ))}
     </div>
   );
 };
