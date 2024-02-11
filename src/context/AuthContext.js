@@ -1,4 +1,3 @@
-// src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
@@ -9,19 +8,38 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const user = localStorage.getItem('token'); // Or decode the token to get user details
-    if (user) {
-      setCurrentUser(user); // Here you might want to set more detailed user info
-    }
+    // Initially check if the user is authenticated
+    checkAuthentication();
   }, []);
 
-  const login = (token) => {
-    localStorage.setItem('token', token);
-    setCurrentUser(token); // Again, set user details as needed
+  const checkAuthentication = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/checkAuth`, {
+        credentials: 'include', // Ensure cookies are included with the request
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.isAuthenticated){
+          setCurrentUser(data); // Adjust according to your API response
+        }
+      } else {
+        setCurrentUser(null);
+      }
+    } catch (error) {
+      console.error('Authentication check failed authContext.js:', error);
+      setCurrentUser(null);
+    }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
+  const login = async () => {
+    await checkAuthentication();
+  };  
+
+  const logout = async () => {
+    await fetch(`${process.env.REACT_APP_API_URL}/api/users/logout`, {
+      method: 'POST',
+      credentials: 'include', // Ensure cookies are included with the request
+    });
     setCurrentUser(null);
   };
 
@@ -29,9 +47,8 @@ export const AuthProvider = ({ children }) => {
     currentUser,
     login,
     logout,
+    checkAuthentication,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
-

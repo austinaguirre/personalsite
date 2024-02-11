@@ -10,9 +10,14 @@ const Layout = () => {
       <nav className="navbar">
         <ul className="nav-list">
           <li className="nav-item"><Link to="/" className="nav-link">Home</Link></li>
-          {currentUser ? (
-            <li className="nav-item"><button onClick={logout}>Logout</button></li>
-          ) : (
+          {currentUser && (
+            <>
+              <li className="nav-item"><Link to="/posts" className="nav-link">View Posts</Link></li>
+              <li className="nav-item"><Link to="/create-post" className="nav-link">Create Post</Link></li>
+              <li className="nav-item"><button onClick={() => logout()}>Logout</button></li>
+            </>
+          )}
+          {!currentUser && (
             <>
               <li className="nav-item"><Link to="/login" className="nav-link">Login</Link></li>
               <li className="nav-item"><Link to="/signup" className="nav-link">Signup</Link></li>
@@ -26,3 +31,4 @@ const Layout = () => {
 };
 
 export default Layout;
+

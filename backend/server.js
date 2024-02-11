@@ -1,6 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
+const cookieParser = require('cookie-parser');
+const cors = require('cors'); // Make sure to require cors
+
+// Import the auth middleware correctly based on your file structure
+const auth = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,9 +15,34 @@ connectDB();
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 
-// Routes
-app.use('/api/users', require('./routes/users')); // Example route
+
+
+// CORS configuration based on the environment
+if (process.env.NODE_ENV === 'production') {
+  // Production-specific logic
+  app.use(express.static('build'));
+  // app.use(cors({ credentials: true, origin: 'https://austinaguirre.github.io/personalsite'}));
+  app.use(cors({ credentials: true, origin: 'https://austinaguirre.github.io'}));
+
+} else {
+  // Development-specific logic
+  // app.use(cors({ credentials: true, origin: 'http://localhost:3000/personalsite' }));
+  app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
+}
+
+
+
+// Define your routes
+app.use('/api/users', require('./routes/users')); 
+app.use('/api/events', require('./routes/events'));
+
+// Define a test route for token verification using the app instance
+app.get('/api/testToken', auth, (req, res) => {
+  res.json({ msg: 'Token is valid', user: req.user });
+});
 
 app.get('/', (req, res) => {
   res.send('Hello from Node.js backend!');
