@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext'; // Make sure the path is correct
+import { useNavigate } from 'react-router-dom';
 
 const CreatePostPage = () => {
   const [title, setTitle] = useState('');
@@ -8,6 +9,8 @@ const CreatePostPage = () => {
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
   const { checkAuthentication } = useAuth(); // Use checkAuthentication to refresh user state if needed
+  const navigate = useNavigate();
+  const { fetchWithAuth } = useAuth();
 
   useEffect(() => {
     // Fetch tags dynamically
@@ -26,25 +29,22 @@ const CreatePostPage = () => {
     formData.append('description', description);
     formData.append('audioFile', file);
 
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/events/newEvent`, {
-      method: 'POST',
-      body: formData,
-      credentials: 'include', // Include cookies in the request
-    });
+    try {
+      const response = await fetchWithAuth(`${process.env.REACT_APP_API_URL}/api/events/newEvent`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    if (!response.ok && response.status === 401) {
-      // If unauthorized, perhaps the session has expired; trigger a re-check of authentication status
-      await checkAuthentication();
-      console.error('Session expired. Please login again.');
-      return;
-    }
-
-    if (response.ok) {
-      const result = await response.json();
-      console.log('Successfully created post:', result);
-      // Handle success, such as redirecting to the posts page or showing a success message
-    } else {
-      throw new Error(`Error: ${response.statusText}`);
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Successfully created post:', result);
+        navigate('/posts'); // Navigate to posts page or show success message
+      } else {
+        console.log("in error")
+        throw new Error(`Error: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error creating post:', error);
     }
   };
 
